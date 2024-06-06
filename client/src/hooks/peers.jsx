@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import Peer from "simple-peer";
+import { toast } from "react-toastify";
+
 import { useSocketControl } from "./socket";
-import RootContext from "./context";
 import { useNewWindow } from "./newWindow";
 import Chat from "../components/Chat";
-import { toast } from "react-toastify";
 
 const peers = new Map();
 

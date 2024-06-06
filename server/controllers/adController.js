@@ -1,6 +1,4 @@
 import asyncHandler from "express-async-handler";
-import User from "../models/userModel.js";
-import generateToken from "../utils/generateToken.js";
 import Ad from "../models/adModel.js";
 import { getOnline } from "../index.js";
 
@@ -20,7 +18,7 @@ const create = asyncHandler(async (req, res) => {
     const ad = await Ad.create({ name, description, user_id });
     res.status(201).json(ad);
   } else {
-    res.status(401);
+    res.status(409);
     throw new Error("Ad already created");
   }
 });
@@ -35,7 +33,7 @@ const update = asyncHandler(async (req, res) => {
     const ad = await Ad.updateOne({ name, description });
     res.status(201).json(ad);
   } else {
-    res.status(401);
+    res.status(204);
     throw new Error("Ad does not exist");
   }
 });
@@ -50,7 +48,7 @@ const remove = asyncHandler(async (req, res) => {
     const ad = await Ad.deleteOne({ _id: ad_id });
     res.status(201).json(ad);
   } else {
-    res.status(401);
+    res.status(204);
     throw new Error("Ad does not exist");
   }
 });
@@ -60,7 +58,7 @@ const get = asyncHandler(async (req, res) => {
   const user_id = req?.user?._id;
 
   if (!ad_id && !user_id) {
-    res.status(401);
+    res.status(400);
     throw new Error("Wrong dtoin");
   }
 
@@ -74,20 +72,24 @@ const get = asyncHandler(async (req, res) => {
   if (ad) {
     res.status(201).json(ad);
   } else {
-    res.status(401);
+    res.status(204);
     throw new Error("Ad does not exist");
   }
 });
 
 const list = asyncHandler(async (req, res) => {
-  let { pageIndex, pageSize } = req.query;
+  let { pageIndex, pageSize, search } = req.query;
 
   const pageInfo = {};
 
   pageInfo.pageIndex = pageIndex || 0;
   pageInfo.pageSize = pageSize || 10;
 
-  const ads = await Ad.find({}).skip(pageInfo.pageIndex).limit(pageInfo.pageSize).lean();
+  const filter = {
+    ...(search ? { $or: [{ name: { $regex: search } }, { description: { $regex: search } }] } : {}),
+  };
+
+  const ads = await Ad.find(filter).skip(pageInfo.pageIndex).limit(pageInfo.pageSize).lean();
 
   const adsOnline = withOnlineFields(ads);
 

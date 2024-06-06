@@ -4,8 +4,8 @@ const ADS_URL = "/api/ads";
 const buildQuery = (data) => {
   if (!data) return "";
 
-  const query = Object.entries(data).reduce((prev, [key, value]) => {
-    return prev + `&${key}=${value}`;
+  const query = Object.entries(data).reduce((prev, [key, value], index) => {
+    return prev + `${index === 0 ? "" : "&"}${key}=${value}`;
   }, "");
 
   return query === "" ? query : "?" + query;

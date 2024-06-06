@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+
 import { Form, Button } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import FormContainer from "../components/FormContainer";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import Loader from "../components/Loader";
-import { useUpdateUserMutation } from "../slices/usersApiSlice";
-import { setCredentials } from "../slices/authSlice";
+
+import FormContainer from "../components/FormContainer";
 import DataObjectResolver from "../components/DataObjectResolver";
 import { useCreateMutation, useGetQuery, useUpdateMutation } from "../slices/adApiSlice";
 
@@ -14,9 +12,7 @@ const ManageScreen = () => {
   const [formValues, setFormValues] = React.useState({});
   const [formType, setFormType] = React.useState("create");
 
-  const { userInfo } = useSelector((state) => state.auth);
-
-  const { data: ad, status } = useGetQuery();
+  const { data: ad, error, status } = useGetQuery();
 
   const [create] = useCreateMutation();
   const [update] = useUpdateMutation();
@@ -52,7 +48,7 @@ const ManageScreen = () => {
     const formOption = formOptions[formType];
 
     try {
-      const res = await formOption.handle(formValues).unwrap();
+      await formOption.handle(formValues).unwrap();
       toast.success(formOption.successMessage);
     } catch (err) {
       toast.error(err?.data?.message || err.error);

@@ -1,9 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import openSocket from "socket.io-client";
-import Peer from "simple-peer";
 
-import * as uuid from "uuid";
 import { usePeer } from "./peers";
 
 const socket = openSocket("localhost:5001", {

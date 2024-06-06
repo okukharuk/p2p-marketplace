@@ -12,7 +12,6 @@ import RegisterScreen from "./screens/RegisterScreen.jsx";
 import ProfileScreen from "./screens/ProfileScreen.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import ManageScreen from "./screens/ManageScreen.jsx";
-import RootContext from "./hooks/context.jsx";
 
 import * as process from "process";
 

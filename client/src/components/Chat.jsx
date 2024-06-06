@@ -1,7 +1,6 @@
 import React from "react";
 import { usePeerData } from "../hooks/peers";
 import Message from "./Message";
-import "../index.css";
 
 const Chat = ({ id }) => {
   const currentMessage = React.useRef("");

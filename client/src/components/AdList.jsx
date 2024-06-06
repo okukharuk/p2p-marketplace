@@ -10,11 +10,13 @@ import { usePeer } from "../hooks/peers";
 import { useSocketControl } from "../hooks/socket";
 
 const Ads = () => {
-  const { data: ads, status, ...elsee } = useListQuery({});
+  const { filter } = useSelector((state) => state.ad);
+
+  const { data: ads, status } = useListQuery(filter);
+
   const { userInfo } = useSelector((state) => state.auth);
 
-  const { socket } = useSocketControl();
-  const { savePeer, peerControls } = usePeer();
+  const { peerControls } = usePeer();
 
   const [connectState, setConnectState] = React.useState("unconnected");
   const navigate = useNavigate();
@@ -38,15 +40,20 @@ const Ads = () => {
       <div className="p-4 flex w-full h-fit flex-wrap">
         {ads &&
           ads.map((ad) => (
-            <Card key={ad._id} className={"flex w-[24rem] max-h-full min-h-[36rem] p-4 mr-4 mb-4"}>
+            <Card key={ad._id} className={"flex w-[24rem] min-h-[36rem] max-h-[36rem] p-4 mr-4 mb-4"}>
               <div
                 className={
                   "rounded-full w-[16px] aspect-square absolute top-[-8px] right-[-8px] " +
-                  (ad.isOnline ? "bg-green-400" : "bg-gray-400")
+                  (ad.isOnline ? "bg-green-400 animate-ping" : "bg-gray-400")
                 }
               ></div>
+              {ad.isOnline && (
+                <div
+                  className={"rounded-full w-[16px] aspect-square absolute top-[-8px] right-[-8px] bg-green-400"}
+                ></div>
+              )}
               <Card.Title>{ad.name}</Card.Title>
-              <Card.Text>{ad.description}</Card.Text>
+              <Card.Text className="max-h-[90%] overflow-y-scroll">{ad.description}</Card.Text>
               {userInfo && userInfo._id === ad.user_id ? (
                 <Button className="mt-auto" onClick={() => handleManage(ad)}>
                   Manage
