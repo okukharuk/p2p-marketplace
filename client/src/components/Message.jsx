@@ -1,12 +1,26 @@
 import React from "react";
 
 const Message = (props) => {
-  console.log(props);
   const { text, time, isMine } = props;
-  console.log(text, time, isMine);
-  const style = isMine ? "mr-auto" : "ml-auto";
 
-  return <div className={`flex ${style}`}>{text}</div>;
+  const label = isMine ? "You" : "Peer";
+  const style = isMine ? { marginRight: "auto" } : { marginLeft: "auto" };
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        flexWrap: "wrap",
+        wordBreak: "break-all",
+        maxWidth: "48%",
+        ...style,
+      }}
+    >
+      <div style={style}>{label}</div>
+      <div>{text}</div>
+    </div>
+  );
 };
 
 export default Message;

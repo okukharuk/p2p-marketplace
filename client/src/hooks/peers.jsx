@@ -23,12 +23,9 @@ const usePeer = () => {
   };
 
   const handleOffer = (id) => {
-    console.log(peers, id);
     const peer = peers.get(id);
-    console.log(peer);
 
     peer.on("signal", (data) => {
-      console.log(1);
       console.log("SIGNAL", JSON.stringify(data));
       socket.emit("offer", { user_id: id, data: JSON.stringify(data) });
     });
@@ -36,7 +33,6 @@ const usePeer = () => {
 
   const handleAccept = (id, data, isInitiator) => {
     const peer = peers.get(id);
-    console.log(data, id, data);
 
     peer.on("signal", (data) => {
       console.log("SIGNAL", data);
@@ -63,18 +59,20 @@ const usePeer = () => {
 
 const usePeerData = (id) => {
   const [messages, setMessages] = React.useState([]);
-  console.log(peers);
   const peer = React.useMemo(() => peers.get(id), [peers.get(id)]);
+
+  const sendMessage = (msg) => {
+    peer.send(msg);
+  };
 
   React.useEffect(() => {
     if (!peer) return;
     peer.on("data", (data) => {
       setMessages((prev) => [...prev, data]);
-      console.log("message", data);
     });
   }, []);
 
-  return messages;
+  return [messages, sendMessage];
 };
 
 export { usePeer, usePeerData };

@@ -6,7 +6,6 @@ import { getOnline } from "../index.js";
 
 const withOnlineFields = (ads) => {
   const online = getOnline();
-  console.log(online);
   const adsOnline = ads.map((ad) => ({ ...ad, isOnline: online.has(ad.user_id.toString()) }));
   return adsOnline;
 };
@@ -57,7 +56,6 @@ const remove = asyncHandler(async (req, res) => {
 });
 
 const get = asyncHandler(async (req, res) => {
-  console.log(req.user);
   const { ad_id } = req.query;
   const user_id = req?.user?._id;
 

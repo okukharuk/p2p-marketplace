@@ -11,8 +11,6 @@ const socket = openSocket("localhost:5001", {
   origins: "*:*",
 });
 
-console.log("socket");
-
 const useSocket = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const { peerControls } = usePeer();
@@ -51,11 +49,8 @@ const useSocket = () => {
 
   React.useEffect(() => {
     if (userInfo && status === "connect") {
-      console.log(status, userInfo);
       socket.emit("user", userInfo._id);
-      console.log(userInfo._id);
       socket.on(userInfo._id, (data) => {
-        console.log(data);
         switch (data.type) {
           case "offer": {
             const { data: connectionData, user } = data;

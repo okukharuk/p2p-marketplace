@@ -59,25 +59,20 @@ socketIo.on("connection", (socket) => {
   socket.on("user", (id) => {
     if (!online.has(id)) online.add(id);
     const user_clients = socketIo.sockets.adapter.rooms.get(id);
-    console.log(online, user_clients);
     socket.join(id);
     currentUser = id;
   });
   socket.on("offer", ({ user_id, data }) => {
-    console.log("kavo2", user_id, data, currentUser);
     if (!currentUser) return;
     socketIo.to(user_id).emit(user_id, { type: "offer", data: data, user: currentUser });
   });
   socket.on("accept", ({ user_id, data }) => {
-    console.log("kavo1", user_id, data, currentUser);
     if (!currentUser) return;
     socketIo.to(user_id).emit(user_id, { type: "accept", data: data, user: currentUser });
   });
   socket.on("user_out", (id) => {
     if (id === 0) return;
     const user_clients = socketIo.sockets.adapter.rooms.get(id);
-    console.log(5);
-    console.log(user_clients);
     if (user_clients && user_clients.size === 1) online.delete(id);
   });
 });
