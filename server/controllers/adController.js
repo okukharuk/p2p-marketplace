@@ -30,7 +30,7 @@ const update = asyncHandler(async (req, res) => {
   const adExists = await Ad.findOne({ user_id, _id: ad_id });
 
   if (!adExists && user_id) {
-    const ad = await Ad.updateOne({ name, description });
+    const ad = await Ad.updateOne({ user_id }, { name, description });
     res.status(201).json(ad);
   } else {
     res.status(204);
@@ -86,7 +86,14 @@ const list = asyncHandler(async (req, res) => {
   pageInfo.pageSize = pageSize || 10;
 
   const filter = {
-    ...(search ? { $or: [{ name: { $regex: search } }, { description: { $regex: search } }] } : {}),
+    ...(search
+      ? {
+          $or: [
+            { name: { $regex: new RegExp(search.toLowerCase(), "i") } },
+            { description: { $regex: new RegExp(search.toLowerCase(), "i") } },
+          ],
+        }
+      : {}),
   };
 
   const ads = await Ad.find(filter).skip(pageInfo.pageIndex).limit(pageInfo.pageSize).lean();

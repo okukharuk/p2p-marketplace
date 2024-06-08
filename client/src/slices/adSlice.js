@@ -12,9 +12,7 @@ const adSlice = createSlice({
       state.filter = { ...state.queue, [action.payload.key]: action.payload.value };
     },
     removeFilter: (state, action) => {
-      const newState = { ...state };
-      delete newState.filter[action.payload];
-      return newState;
+      state.filter = {};
     },
   },
 });

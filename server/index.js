@@ -36,10 +36,6 @@ app.use(cookieParser());
 app.use("/api/users", userRoutes);
 app.use("/api/ads", adRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 app.use(notFound);
 app.use(errorHandler);
 
@@ -58,7 +54,6 @@ socketIo.on("connection", (socket) => {
 
   socket.on("user", (id) => {
     if (!online.has(id)) online.add(id);
-    const user_clients = socketIo.sockets.adapter.rooms.get(id);
     socket.join(id);
     currentUser = id;
   });
@@ -80,9 +75,3 @@ socketIo.on("connection", (socket) => {
 export const getOnline = () => {
   return online;
 };
-
-// POST /api/users -Register a user
-// POST /api/users/auth -Authenticate a user and get token
-// POST /api/users/logout -Logout user and clear cookie
-// GET /api/users/profile -get user profile
-// PUT /api/users/profile -update profile

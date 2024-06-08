@@ -1,13 +1,11 @@
-import { Container, Card, Button, ListGroup, ListGroupItem } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { Card, Button } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { useListQuery } from "../slices/adApiSlice";
 import DataListResolver from "./DataListResolver";
 import { useNavigate } from "react-router-dom";
 
-import Peer from "simple-peer";
 import React from "react";
 import { usePeer } from "../hooks/peers";
-import { useSocketControl } from "../hooks/socket";
 
 const Ads = () => {
   const { filter } = useSelector((state) => state.ad);
